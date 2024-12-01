@@ -1,0 +1,63 @@
+﻿@model ALJEproject.Models.Menu
+
+<div class="modal fade" id="viewMenuModal" tabindex="-1" role="dialog" aria-labelledby="viewMenuModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewMenuModalLabel">Menu Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><strong>MenuID:</strong></label>
+                    <p>@Model.MenuID</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Controller Name:</strong></label>
+                    <p>@Model.ControllerName</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Menu Name:</strong></label>
+                    <p>@Model.MenuName</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Menu Description:</strong></label>
+                    <p>@Model.MenuDesc</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Created Date:</strong></label>
+                    <p>@Model.CreatedDate.ToString("MM/dd/yyyy")</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Created By:</strong></label>
+                    <p>@Model.CreatedBy</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Updated Date:</strong></label>
+                    <p>@Model.UpdatedDate?.ToString("MM/dd/yyyy")</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Updated By:</strong></label>
+                    <p>@Model.UpdatedBy</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Menu URL:</strong></label>
+                    <p>@Model.MenuURL</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Menu Order:</strong></label>
+                    <p>@Model.MenuOrder</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Active:</strong></label>
+                    <p>@Model.Active</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

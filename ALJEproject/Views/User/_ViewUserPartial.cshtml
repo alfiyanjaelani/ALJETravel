@@ -1,0 +1,64 @@
+﻿@model ALJEproject.Models.UserRoleView
+
+<div class="modal fade" id="viewUserModal" tabindex="-1" role="dialog" aria-labelledby="viewUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewUserModalLabel">User Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><strong>User ID:</strong></label>
+                    <p>@Model.UserId</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Username:</strong></label>
+                    <p>@Model.UserName</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Full Name:</strong></label>
+                    <p>@Model.FullName</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Company Name:</strong></label>
+                    <p>@Model.CompanyName</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Email Address:</strong></label>
+                    <p>@Model.EmailAddress</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>Role:</strong></label>
+                    <p>@Model.RoleName</p> <!-- Assuming Role navigation property exists -->
+                </div>
+                <div class="form-group">
+                    <label><strong>Phone:</strong></label>
+                    <p>@Model.Phone</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>CreatedBy :</strong></label>
+                    <p>@Model.CreatedBy</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>CreatedDate :</strong></label>
+                    <p>@Model.CreatedDate</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>UpdatedBy :</strong></label>
+                    <p>@Model.UpdatedBy</p>
+                </div>
+                <div class="form-group">
+                    <label><strong>UpdatedDate :</strong></label>
+                    <p>@Model.UpdatedDate</p>
+                </div>
+                <!-- Add other fields if necessary -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

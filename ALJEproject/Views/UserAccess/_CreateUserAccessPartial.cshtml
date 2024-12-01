@@ -1,0 +1,61 @@
+﻿@model ALJEproject.Models.UserAccess
+
+<div class="modal fade" id="createUserAccessModal" tabindex="-1" role="dialog" aria-labelledby="createUserAccessModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createUserAccessModalLabel">Create New User Access</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" method="post" id="createUserAccessForm">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        <label asp-for="RoleID" class="control-label"></label>
+                        <select asp-for="RoleID" class="form-control" asp-items="ViewBag.RoleList">
+                            <option value="">Select Role</option>
+                        </select>
+                        <span asp-validation-for="RoleID" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="MenuID" class="control-label"></label>
+                        <select asp-for="MenuID" class="form-control" asp-items="ViewBag.MenuList">
+                            <option value="">Select Menu</option>
+                        </select>
+                        <span asp-validation-for="MenuID" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Permissions</label><br />
+                        <div class="form-check">
+                            <input asp-for="Views" class="form-check-input" type="checkbox" />
+                            <label class="form-check-label" for="View">View</label>
+                        </div>
+                        <div class="form-check">
+                            <input asp-for="Inserts" class="form-check-input" type="checkbox" />
+                            <label class="form-check-label" for="Insert">Insert</label>
+                        </div>
+                        <div class="form-check">
+                            <input asp-for="Edits" class="form-check-input" type="checkbox" />
+                            <label class="form-check-label" for="Edit">Edit</label>
+                        </div>
+                        <div class="form-check">
+                            <input asp-for="Deletes" class="form-check-input" type="checkbox" />
+                            <label class="form-check-label" for="Delete">Delete</label>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create User Access</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Home Page";
+    var username = Context.Session.GetString("Username"); // Ambil username dari session
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            background-color: #f0f8ff; /* Ganti dengan warna atau gambar yang diinginkan */
+            background-image: url('/assets/img/background_01.jpg'); /* Ganti dengan URL gambar latar belakang */     
+            background-size: 100% auto; /* Menyesuaikan gambar dengan lebar layar */
+            background-repeat: no-repeat; /* Tidak mengulang gambar */
+            background-position: center center; /* Menjaga gambar tetap di tengah */
+            height: 100vh; /* Mengisi layar penuh */
+            color: #333;
+        }
+
+        .container {
+            padding: 50px;
+            /*background-color: rgba(255, 255, 255, 0.7);*/*/ /* Efek transparan di latar belakang konten */
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="text-center container">
+        <h1 class="display-4">Welcome</h1>
+        @if (!string.IsNullOrEmpty(username))
+        {
+            <p>Hello, @username!</p>
+        }
+        else
+        {
+            <p>Please login to access more features.</p>
+        }
+        <p>Learn about <a href="https://aljesharing.blogspot.com/">building Web apps with ASP.NET Core</a>.</p>
+    </div>
+
+</body>
+</html>

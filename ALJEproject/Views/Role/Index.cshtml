@@ -1,0 +1,240 @@
+﻿@{
+    ViewData["Title"] = "Roles Page";
+}
+@model ALJEproject.Models.PaginatedRoleViewModel
+
+<h2>Role List</h2>
+
+<div class="mb-3">
+    <button class="btn btn-primary btn-create-role" data-url="@Url.Action("Create", "Role")">
+        <i class="fas fa-user-plus"></i> Create New Role
+    </button>
+</div>
+<!-- Search Input -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Export to Excel Button on the Left -->
+    <div>
+        <form method="post" action="@Url.Action("ExportToExcel", "Role")">
+            <button type="submit" class="btn btn-success"><i class="fas fa-file-excel"></i> Export to Excel</button>
+        </form>
+    </div>
+
+    <!-- Search Form on the Right -->
+    <form method="get" action="@Url.Action("Index", "Role")" class="ms-auto">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search roles..." value="@ViewData["CurrentSearch"]" />
+            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Search</button>
+        </div>
+    </form>
+</div>
+
+<table id="RoleTable" class="table">
+    <thead>
+        <tr>
+            <th>RoleID</th>
+            <th>Role Name</th>
+            <th>Created date</th>
+            <th>Created by</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model.Roles) // Assuming 'Model.Users' is the list of users
+        {
+            <tr id="roleRow-@role.RoleID">
+                <td>@role.RoleID</td>
+                <td>@role.RoleName</td>
+                <td>@role.CreatedDate</td>
+                <td>@role.CreatedBy</td>
+                <td>
+                    <button class="btn btn-primary btn-view-role" data-id="@role.RoleID">
+                        <i class="fas fa-eye"></i> View
+                    </button>
+                    <button class="btn btn-warning btn-edit-role" data-id="@role.RoleID">
+                        <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="btn btn-danger btn-delete-role" data-id="@role.RoleID">
+                        <i class="fas fa-trash-alt"></i> Delete
+                    </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Pagination Controls -->
+<div id="paginationControls" class="d-flex justify-content-between align-items-center">
+    <div>
+        Showing @((Model.CurrentPage - 1) * Model.PageSize + 1) to @Math.Min(Model.CurrentPage * Model.PageSize, Model.TotalCount) of @Model.TotalCount entries
+    </div>
+    <nav>
+        <ul class="pagination mb-0">
+            @if (Model.CurrentPage > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage - 1, pageSize = Model.PageSize })">Prev</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link">Prev</a></li>
+            }
+
+            @for (int i = 1; i <= Math.Ceiling((double)Model.TotalCount / Model.PageSize); i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i, pageSize = Model.PageSize })">@i</a>
+                </li>
+            }
+
+            @if (Model.CurrentPage < Math.Ceiling((double)Model.TotalCount / Model.PageSize))
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Index", new { page = Model.CurrentPage + 1, pageSize = Model.PageSize })">Next</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled"><a class="page-link">Next</a></li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<!-- Modals for Create and Edit -->
+<div id="createRoleModalContainer"></div>
+<div id="editRoleModalContainer"></div>
+<!-- Container for View Role Modal -->
+<div id="viewRoleModalContainer"></div>
+
+<!-- Notification Modal -->
+<div class="modal fade" id="notificationModal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificationModalLabel">Notification</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="notificationMessage">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="refreshPage()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Create Role
+            $(document).on("click", ".btn-create-role", function () {
+                var url = $(this).data("url");
+                $.get(url, function (data) {
+                    $("#createRoleModalContainer").html(data);
+                    $("#createRoleModal").modal("show");
+                });
+            });
+
+            $(document).on('submit', '#createRoleForm', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            $('#notificationMessage').text("Role created successfully!");
+                            $('#notificationModal').modal('show');
+                            $('#createRoleModal').modal('hide');
+                        } else {
+                            displayErrors(response.errors);
+                        }
+                    },
+                    error: function () {
+                        $('#notificationMessage').text("An error occurred while creating the role.");
+                        $('#notificationModal').modal('show');
+                    }
+                });
+            });
+
+            // Edit Role
+            $(document).on("click", ".btn-edit-role", function () {
+                var roleId = $(this).data("id");
+                $.get('@Url.Action("Edit", "Role")', { id: roleId }, function (data) {
+                    $("#editRoleModalContainer").html(data);
+                    $("#editRoleModal").modal("show");
+                });
+            });
+
+            $(document).on('submit', '#editRoleForm', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            $('#notificationMessage').text("Role updated successfully!");
+                            $('#notificationModal').modal('show');
+                            $('#editRoleModal').modal('hide');
+                        } else {
+                            displayErrors(response.errors);
+                        }
+                    },
+                    error: function () {
+                        $('#notificationMessage').text("An error occurred while updating the role.");
+                        $('#notificationModal').modal('show');
+                    }
+                });
+            });
+
+            // Delete Role
+            $(document).on("click", ".btn-delete-role", function () {
+                var roleId = $(this).data("id");
+                if (confirm("Are you sure you want to delete this role?")) {
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("Delete", "Role")',
+                        data: { id: roleId },
+                        success: function (response) {
+                            if (response.success) {
+                                $('#notificationMessage').text("Role deleted successfully!");
+                                $('#notificationModal').modal('show');
+                                $('#roleRow-' + roleId).remove();
+                            } else {
+                                displayErrors(response.errors);
+                            }
+                        },
+                        error: function () {
+                            $('#notificationMessage').text("An error occurred while deleting the role.");
+                            $('#notificationModal').modal('show');
+                        }
+                    });
+                }
+            });
+
+             // View Role
+            $(document).on("click", ".btn-view-role", function () {
+                var roleId = $(this).data("id");
+                $.get('@Url.Action("View", "Role")', { id: roleId }, function (data) {
+                    $("#viewRoleModalContainer").html(data);
+                    $("#viewRoleModal").modal("show");
+                });
+            });
+
+        });
+
+        function displayErrors(errors) {
+            let errorMessages = errors.map(error => `<p>${error}</p>`).join("");
+            $('#notificationMessage').html(errorMessages);
+            $('#notificationModal').modal('show');
+        }
+
+        function refreshPage() {
+            location.reload();
+        }
+    </script>
+}

@@ -1,0 +1,50 @@
+﻿@model ALJEproject.Models.Option
+
+<div class="modal fade" id="createOptionModal" tabindex="-1" role="dialog" aria-labelledby="createOptionModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createOptionModalLabel">Create New Option</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" method="post" id="createOptionForm">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        <label asp-for="FieldName" class="control-label"></label>
+                        <input asp-for="FieldName" class="form-control" />
+                        <span asp-validation-for="FieldName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FieldValue" class="control-label"></label>
+                        <input asp-for="FieldValue" class="form-control" />
+                        <span asp-validation-for="FieldValue" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="LongName" class="control-label"></label>
+                        <input asp-for="LongName" class="form-control" />
+                        <span asp-validation-for="LongName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ShortName" class="control-label"></label>
+                        <input asp-for="ShortName" class="form-control" />
+                        <span asp-validation-for="ShortName" class="text-danger"></span>
+                    </div>                    
+                    <div class="form-group form-check">
+                        <input asp-for="Active" class="form-check-input" type="checkbox" />
+                        <label asp-for="Active" class="form-check-label"></label>
+                        <span asp-validation-for="Active" class="text-danger"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create Option</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

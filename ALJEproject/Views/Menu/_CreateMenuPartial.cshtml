@@ -1,0 +1,63 @@
+﻿@model ALJEproject.Models.Menu
+
+<div class="modal fade" id="createMenuModal" tabindex="-1" role="dialog" aria-labelledby="createMenuModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createMenuModalLabel">Create New Menu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Create" method="post" id="createMenuForm">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        <label asp-for="MenuName" class="control-label"></label>
+                        <input asp-for="MenuName" class="form-control" />
+                        <span asp-validation-for="MenuName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ParentMenuID" class="control-label">Parent Menu</label>
+                        <select asp-for="ParentMenuID" class="form-control" asp-items="ViewBag.ParentMenus">
+                            <option value="">-- Select Parent Menu --</option>
+                        </select>
+                        <span asp-validation-for="ParentMenuID" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ControllerName" class="control-label"></label>
+                        <input asp-for="ControllerName" class="form-control" />
+                        <span asp-validation-for="ControllerName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MenuURL" class="control-label"></label>
+                        <input asp-for="MenuURL" class="form-control" />
+                        <span asp-validation-for="MenuURL" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MenuDesc" class="control-label"></label>
+                        <input asp-for="MenuDesc" class="form-control" />
+                        <span asp-validation-for="MenuDesc" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="MenuOrder" class="control-label"></label>
+                        <input asp-for="MenuOrder" class="form-control" />
+                        <span asp-validation-for="MenuOrder" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check">
+                        <input asp-for="Active" class="form-check-input" type="checkbox" />
+                        <label asp-for="Active" class="form-check-label"></label>
+                        <span asp-validation-for="Active" class="text-danger"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create Menu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
